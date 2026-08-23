@@ -288,6 +288,14 @@ impl Network {
         let parameters = self.parameters.as_ref();
 
         unsafe {
+
+            #[cfg(target_arch = "x86_64")]
+            {
+                use std::arch::x86_64::{_MM_HINT_T0, _mm_prefetch};
+                for i in 0..8 {
+                    _mm_prefetch::<_MM_HINT_T0>(parameters.l1_weights[bucket].as_ptr().add(64*i));
+                }
+            }
             let ft_out =
                 forward::activate_ft(&self.pst_stack[self.index], &self.threat_stack[self.index], board.side_to_move());
             let (nnz_indexes, nnz_count) = forward::find_nnz(&ft_out, &self.nnz_table);
