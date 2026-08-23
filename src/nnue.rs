@@ -292,7 +292,7 @@ impl Network {
             #[cfg(target_arch = "x86_64")]
             {
                 use std::arch::x86_64::{_MM_HINT_T0, _mm_prefetch};
-                for i in 0..8 {
+                for i in 0..2 {
                     _mm_prefetch::<_MM_HINT_T0>(parameters.l1_weights[bucket].as_ptr().add(64*i));
                 }
             }
